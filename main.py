@@ -9,13 +9,15 @@ import os
 # Load your trained model
 # model = tf.keras.models.load_model("fine_tuning_with_resnet.keras")
 
-MODEL_URL = "https://huggingface.co/albereinsten/Brain-Tumor/blob/main/fine_tuning_with_resnet.keras"
+# MODEL_URL = "https://huggingface.co/albereinsten/Brain-Tumor/blob/main/fine_tuning_with_resnet.keras"
+MODEL_URL = "https://huggingface.co/albereinsten/Brain-Tumor/resolve/main/fine_tuning_with_resnet.keras"
 MODEL_PATH = "fine_tuning_with_resnet.keras"
 
 def download_model():
     if not os.path.exists(MODEL_PATH):
         with st.spinner("Downloading model..."):
             r = requests.get(MODEL_URL)
+            r.raise_for_status()  # <-- IMPORTANT
             with open(MODEL_PATH, "wb") as f:
                 f.write(r.content)
 
