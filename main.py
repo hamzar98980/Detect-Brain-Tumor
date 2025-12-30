@@ -12,11 +12,20 @@ import os
 MODEL_URL = "https://huggingface.co/albereinsten/Brain-Tumor/blob/main/fine_tuning_with_resnet.keras"
 MODEL_PATH = "fine_tuning_with_resnet.keras"
 
-if not os.path.exists(MODEL_PATH):
-    with open(MODEL_PATH, "wb") as f:
-        f.write(requests.get(MODEL_URL).content)
+def download_model():
+    if not os.path.exists(MODEL_PATH):
+        with st.spinner("Downloading model..."):
+            r = requests.get(MODEL_URL)
+            with open(MODEL_PATH, "wb") as f:
+                f.write(r.content)
 
-model = tf.keras.models.load_model(MODEL_PATH)
+download_model()
+
+@st.cache_resource
+def load_my_model():
+    return tf.keras.models.load_model(MODEL_PATH)
+
+model = load_my_model()
 
 st.title("🧠 Brain Tumor Detection")
 st.write("Upload an MRI image and the model will predict whether a tumor is present.")
