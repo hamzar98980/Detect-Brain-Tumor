@@ -3,9 +3,20 @@ import numpy as np
 from PIL import Image
 import tensorflow as tf
 from keras.applications.resnet50 import preprocess_input
+import requests
+import os
 
 # Load your trained model
-model = tf.keras.models.load_model("fine_tuning_with_resnet.keras")
+# model = tf.keras.models.load_model("fine_tuning_with_resnet.keras")
+
+MODEL_URL = "https://huggingface.co/albereinsten/Brain-Tumor/blob/main/fine_tuning_with_resnet.keras"
+MODEL_PATH = "fine_tuning_with_resnet.keras"
+
+if not os.path.exists(MODEL_PATH):
+    with open(MODEL_PATH, "wb") as f:
+        f.write(requests.get(MODEL_URL).content)
+
+model = tf.keras.models.load_model(MODEL_PATH)
 
 st.title("🧠 Brain Tumor Detection")
 st.write("Upload an MRI image and the model will predict whether a tumor is present.")
